@@ -40,19 +40,10 @@ public class CommandServerHandler extends ChannelHandlerAdapter {
 			throws Exception {
 		// TODO Auto-generated method stub
 		LOG.log(Level.INFO, "Channel READ!");
-		String s = (String) msg;
-		s = s.trim().toLowerCase();
-		if (s.equals("ping")) {
-			LOG.log(Level.INFO, "Ping message received");
-			ctx.writeAndFlush("pong\n");
-			return;
-		} else if (s.equals("chau")) {
-			LOG.log(Level.INFO, "Chau message received. closing connection.");
-			ctx.writeAndFlush("byebye\n").addListener(
-					ChannelFutureListener.CLOSE);
-		} else {
-			LOG.log(Level.WARNING, "No entiendo");
-			ctx.writeAndFlush("no entiendo \n");
+		if (msg instanceof ComandoSumar) {
+			ComandoSumar c = (ComandoSumar) msg;
+			int res = c.getA() + c.getB();
+			ctx.writeAndFlush("Resultado = " + res + "\n");
 		}
 	}
 }

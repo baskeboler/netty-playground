@@ -20,6 +20,7 @@ public class CommandServerInitializer extends ChannelInitializer<NioSocketChanne
 		pipeline.addLast("framer", new LineBasedFrameDecoder(MAX_LENGTH, true, true));
 		pipeline.addLast("string-decoder", new StringDecoder());
 		pipeline.addLast("string-encoder", new StringEncoder());
+		pipeline.addLast("comando-decoder", new CommandDecoder());
 		pipeline.addLast("handler", new CommandServerHandler());
 		
 	}
