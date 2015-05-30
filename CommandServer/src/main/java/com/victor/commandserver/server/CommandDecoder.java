@@ -13,13 +13,16 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 		// TODO Auto-generated method stub
 		String s = msg.trim().toLowerCase();
 		String[] palabras = s.split(" ");
-		if (palabras.length >= 3) {
-			if (palabras[0].equals("sumar")) {
-				int a = Integer.valueOf(palabras[1]);
-				int b = Integer.valueOf(palabras[2]);
-				
-				out.add(new ComandoSumar(a, b));
-			}
+		if (palabras[0].equals("sumar")) {
+			int a = Integer.valueOf(palabras[1]);
+			int b = Integer.valueOf(palabras[2]);
+
+			out.add(new ComandoSumar(a, b));
+		} else if (palabras[0].equals("chau")) {
+			out.add(new ComandoSalir());
+		} else if (palabras[0].equals("fibonacci")) {
+			int a = Integer.valueOf(palabras[1]);
+			out.add(new ComandoFibonacci(a));
 		}
 	}
 
