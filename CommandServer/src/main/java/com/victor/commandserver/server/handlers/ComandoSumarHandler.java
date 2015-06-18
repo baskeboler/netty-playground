@@ -13,8 +13,8 @@ import com.victor.commandserver.server.commands.ComandoSumar;
 
 @Sharable
 @Component
-public class CommandServerHandler extends ChannelHandlerAdapter {
-	private static Logger LOG = Logger.getLogger(CommandServerHandler.class
+public class ComandoSumarHandler extends ChannelHandlerAdapter {
+	private static Logger LOG = Logger.getLogger(ComandoSumarHandler.class
 			.getName());
 
 	@Override

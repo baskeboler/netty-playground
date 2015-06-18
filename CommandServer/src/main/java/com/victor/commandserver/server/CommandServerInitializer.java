@@ -19,7 +19,7 @@ import com.victor.commandserver.server.handlers.ComandoEchoHandler;
 import com.victor.commandserver.server.handlers.ComandoFibonacciHandler;
 import com.victor.commandserver.server.handlers.ComandoFortuneHandler;
 import com.victor.commandserver.server.handlers.ComandoSalirHandler;
-import com.victor.commandserver.server.handlers.CommandServerHandler;
+import com.victor.commandserver.server.handlers.ComandoSumarHandler;
 
 @Component
 public class CommandServerInitializer extends
@@ -37,7 +37,7 @@ public class CommandServerInitializer extends
 	private ComandoSalirHandler salirHandler;
 
 	@Autowired
-	private CommandServerHandler serverHandler;
+	private ComandoSumarHandler sumarHandler;
 	@Autowired
 	private ComandoEchoHandler echoHandler;
 
@@ -59,7 +59,7 @@ public class CommandServerInitializer extends
 		pipeline.addLast("string-encoder", STRING_ENCODER);
 		pipeline.addLast("idle-state-handler", new IdleStateHandler(20, 0, 0));
 		pipeline.addLast("comando-decoder", COMMAND_DECODER);
-		pipeline.addLast("handler", serverHandler);
+		pipeline.addLast("sumar-handler", sumarHandler);
 		pipeline.addLast("comando-salir", salirHandler);
 		pipeline.addLast("fibonacci-handler", fibHandler);
 		pipeline.addLast("fortune-handler", fortuneHandler);
@@ -97,12 +97,12 @@ public class CommandServerInitializer extends
 		this.salirHandler = salirHandler;
 	}
 
-	public CommandServerHandler getServerHandler() {
-		return serverHandler;
+	public ComandoSumarHandler getServerHandler() {
+		return sumarHandler;
 	}
 
-	public void setServerHandler(CommandServerHandler serverHandler) {
-		this.serverHandler = serverHandler;
+	public void setServerHandler(ComandoSumarHandler serverHandler) {
+		this.sumarHandler = serverHandler;
 	}
 
 }
