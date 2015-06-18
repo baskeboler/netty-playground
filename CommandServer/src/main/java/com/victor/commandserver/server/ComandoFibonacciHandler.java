@@ -1,10 +1,13 @@
 package com.victor.commandserver.server;
 
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelHandler.Sharable;
+
+import org.springframework.stereotype.Component;
 
 @Sharable
+@Component
 public class ComandoFibonacciHandler extends ChannelHandlerAdapter{
 
 	private int fib(int n) {
@@ -22,7 +25,7 @@ public class ComandoFibonacciHandler extends ChannelHandlerAdapter{
 			ctx.channel().eventLoop().execute(() -> {
 				ComandoFibonacci f = (ComandoFibonacci) msg;
 				int res = fib(f.getA());
-				ctx.writeAndFlush("resultado = " + res + "/n");
+				ctx.writeAndFlush("resultado = " + res + "\n");
 			});
 		} else super.channelRead(ctx, msg);
 	}

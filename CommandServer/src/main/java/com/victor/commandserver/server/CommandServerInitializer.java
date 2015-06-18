@@ -8,18 +8,31 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class CommandServerInitializer extends
 		ChannelInitializer<NioSocketChannel> {
 
 	private static final Logger LOG = Logger
 			.getLogger(CommandServerInitializer.class.getName());
-	private static final ComandoFibonacciHandler COMANDO_FIBONACCI_HANDLER = new ComandoFibonacciHandler();
-	private static final ComandoSalirHandler COMANDO_SALIR_HANDLER = new ComandoSalirHandler();
-	private static final CommandServerHandler COMMAND_SERVER_HANDLER = new CommandServerHandler();
+	@Autowired
+	private ComandoFortuneHandler fortuneHandler;
+	
+	@Autowired
+	private ComandoFibonacciHandler fibHandler;
+	
+	@Autowired
+	private ComandoSalirHandler salirHandler;
+	
+	@Autowired
+	private CommandServerHandler serverHandler;
+	
 	private static final CommandDecoder COMMAND_DECODER = new CommandDecoder();
 	private static final StringEncoder STRING_ENCODER = new StringEncoder();
 	private static final StringDecoder STRING_DECODER = new StringDecoder();
@@ -35,11 +48,12 @@ public class CommandServerInitializer extends
 				true));
 		pipeline.addLast("string-decoder", STRING_DECODER);
 		pipeline.addLast("string-encoder", STRING_ENCODER);
+		pipeline.addLast("idle-state-handler", new IdleStateHandler(20, 0, 0));
 		pipeline.addLast("comando-decoder", COMMAND_DECODER);
-		pipeline.addLast("readtimeouthandler", new ReadTimeoutHandler(20));
-		pipeline.addLast("handler", COMMAND_SERVER_HANDLER);
-		pipeline.addLast("comando-salir", COMANDO_SALIR_HANDLER);
-		pipeline.addLast("fibonacci-handler", COMANDO_FIBONACCI_HANDLER);
+		pipeline.addLast("handler", serverHandler);
+		pipeline.addLast("comando-salir", salirHandler);
+		pipeline.addLast("fibonacci-handler", fibHandler);
+		pipeline.addLast("fortune-handler", fortuneHandler);
 		
 		LOG.info("Initializing Channel pipeline");
 		pipeline.names().stream().forEachOrdered((String handlerName) -> {
@@ -47,6 +61,38 @@ public class CommandServerInitializer extends
 		});
 		LOG.info("End of pipeline");
 
+	}
+
+	public ComandoFortuneHandler getFortuneHandler() {
+		return fortuneHandler;
+	}
+
+	public void setFortuneHandler(ComandoFortuneHandler fortuneHandler) {
+		this.fortuneHandler = fortuneHandler;
+	}
+
+	public ComandoFibonacciHandler getFibHandler() {
+		return fibHandler;
+	}
+
+	public void setFibHandler(ComandoFibonacciHandler fibHandler) {
+		this.fibHandler = fibHandler;
+	}
+
+	public ComandoSalirHandler getSalirHandler() {
+		return salirHandler;
+	}
+
+	public void setSalirHandler(ComandoSalirHandler salirHandler) {
+		this.salirHandler = salirHandler;
+	}
+
+	public CommandServerHandler getServerHandler() {
+		return serverHandler;
+	}
+
+	public void setServerHandler(CommandServerHandler serverHandler) {
+		this.serverHandler = serverHandler;
 	}
 
 }

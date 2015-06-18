@@ -33,6 +33,9 @@ public class CommandServer {
 
 	@Autowired
 	NioEventLoopGroup workerGroup;
+	
+	@Autowired
+	CommandServerInitializer initializer;
 
 	private Channel serverChannel;
 	private ChannelFuture closeChannelFuture;
@@ -53,9 +56,10 @@ public class CommandServer {
 		bootstrap.channel(NioServerSocketChannel.class)
 				.group(bossGroup, workerGroup)
 				.handler(new LoggingHandler(LogLevel.INFO))
-				.childHandler(new CommandServerInitializer());
+				.childHandler(initializer)
+				.childOption(ChannelOption.TCP_NODELAY, true);
 		serverChannel = bootstrap.bind(PORT).sync().channel();
-		LOG.log(Level.INFO, "Listening on port" + PORT);
+		LOG.log(Level.INFO, "Listening on port " + PORT);
 		closeChannelFuture = serverChannel.closeFuture().addListener(new ChannelFutureListener() {
 
 			public void operationComplete(ChannelFuture future)

@@ -3,12 +3,14 @@ package com.victor.commandserver.server;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.handler.timeout.IdleStateEvent;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Component;
+
 @Sharable
+@Component
 public class CommandServerHandler extends ChannelHandlerAdapter {
 	private static Logger LOG = Logger.getLogger(CommandServerHandler.class
 			.getName());
@@ -16,8 +18,6 @@ public class CommandServerHandler extends ChannelHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		// TODO Auto-generated method stub
-		LOG.log(Level.INFO, "Channel READ!");
 		if (msg instanceof ComandoSumar) {
 			ctx.channel().eventLoop().execute(() -> {
 				ComandoSumar c = (ComandoSumar) msg;
@@ -28,15 +28,22 @@ public class CommandServerHandler extends ChannelHandlerAdapter {
 			super.channelRead(ctx, msg);
 		}
 	}
-	
+
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
 			throws Exception {
 		// TODO Auto-generated method stub
-		if (cause instanceof ReadTimeoutException) {
-			ctx.writeAndFlush("Y bo que onda?\n");
+		if (evt instanceof IdleStateEvent) {
+			IdleStateEvent idleState = (IdleStateEvent) evt;
+			switch (idleState.state()) {
+			case READER_IDLE: {
+				ctx.writeAndFlush("Ipa bo? Que onda?\n");
+			}
+			default:
+				break;
+			}
 		} else {
-			super.exceptionCaught(ctx, cause);
+			super.userEventTriggered(ctx, evt);
 		}
 	}
 }

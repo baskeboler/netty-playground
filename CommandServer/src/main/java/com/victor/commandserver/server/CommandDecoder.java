@@ -25,6 +25,8 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 		} else if (palabras[0].equals("fibonacci")) {
 			int a = Integer.valueOf(palabras[1]);
 			out.add(new ComandoFibonacci(a));
+		} else if (palabras[0].equals("fortune")) {
+			out.add(new ComandoFortune());
 		}
 	}
 

@@ -1,11 +1,14 @@
 package com.victor.commandserver.server;
 
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelHandler.Sharable;
+
+import org.springframework.stereotype.Component;
 
 @Sharable
+@Component
 public class ComandoSalirHandler extends ChannelHandlerAdapter{
 	
 	@Override
