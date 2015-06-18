@@ -7,6 +7,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class CommandServer {
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 		bootstrap.channel(NioServerSocketChannel.class)
 				.group(bossGroup, workerGroup)
-				.handler(new LoggingHandler())
+				.handler(new LoggingHandler(LogLevel.INFO))
 				.childHandler(new CommandServerInitializer());
 		serverChannel = bootstrap.bind(PORT).sync().channel();
 		LOG.log(Level.INFO, "Listening on port" + PORT);
@@ -77,6 +78,8 @@ public class CommandServer {
 
 	@PreDestroy
 	public void cleanUp() {
+		LOG.info("Shutting down server. Cleaning up.");
+		serverChannel.disconnect();
 		serverChannel.close();
 	}
 

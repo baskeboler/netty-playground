@@ -3,6 +3,7 @@ package com.victor.commandserver.server;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.ReadTimeoutException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,17 @@ public class CommandServerHandler extends ChannelHandlerAdapter {
 			});
 		} else {
 			super.channelRead(ctx, msg);
+		}
+	}
+	
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		// TODO Auto-generated method stub
+		if (cause instanceof ReadTimeoutException) {
+			ctx.writeAndFlush("Y bo que onda?\n");
+		} else {
+			super.exceptionCaught(ctx, cause);
 		}
 	}
 }

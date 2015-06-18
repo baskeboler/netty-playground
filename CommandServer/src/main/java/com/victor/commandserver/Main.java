@@ -2,30 +2,28 @@ package com.victor.commandserver;
 
 import java.util.logging.Logger;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.victor.commandserver.server.CommandServer;
 
 
-@Configuration
-@ComponentScan
+
+@SpringBootApplication
 public class Main {
 
 	private static Logger LOG = Logger.getLogger(Main.class.getName());
+	
+	@Autowired
+	private CommandServer commandServer;
 
-	public static void main(String[] args) {
-		LOG.info("Hola!");
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(Main.class);
-	//	ctx.
-		CommandServer server = ctx.getBean(CommandServer.class);
-		try {
-			server.getCloseChannelFuture().sync();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws InterruptedException {
+		LOG.info("Iniciando Command Server");
+		ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
+		CommandServer server = context.getBean(CommandServer.class);
+		server.getCloseChannelFuture().sync();
+	
 	}
 }
