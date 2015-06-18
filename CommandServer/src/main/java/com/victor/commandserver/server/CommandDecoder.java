@@ -6,6 +6,12 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
 
+import com.victor.commandserver.server.commands.ComandoEcho;
+import com.victor.commandserver.server.commands.ComandoFibonacci;
+import com.victor.commandserver.server.commands.ComandoFortune;
+import com.victor.commandserver.server.commands.ComandoSalir;
+import com.victor.commandserver.server.commands.ComandoSumar;
+
 @Sharable
 public class CommandDecoder extends MessageToMessageDecoder<String> {
 
@@ -27,6 +33,8 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 			out.add(new ComandoFibonacci(a));
 		} else if (palabras[0].equals("fortune")) {
 			out.add(new ComandoFortune());
+		} else if (palabras[0].equals("echo")) {
+			out.add(new ComandoEcho(msg));
 		}
 	}
 

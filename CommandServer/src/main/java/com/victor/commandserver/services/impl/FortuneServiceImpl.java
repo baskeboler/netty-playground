@@ -53,7 +53,12 @@ public class FortuneServiceImpl implements FortuneService {
 
 	@Override
 	public String getCookie() {
-		String res = fortunesIterator.next();
+		String res = null;
+		synchronized (fortunesIterator) {
+			if (!fortunesIterator.hasNext())
+				fortunesIterator = fortunes.iterator();
+			res = fortunesIterator.next();
+		}
 		LOG.info("Returning cookie: " + res);
 		return res;
 	}

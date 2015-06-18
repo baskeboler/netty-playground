@@ -1,4 +1,4 @@
-package com.victor.commandserver.server;
+package com.victor.commandserver.server.commands;
 
 public class ComandoSumar {
 	int a;

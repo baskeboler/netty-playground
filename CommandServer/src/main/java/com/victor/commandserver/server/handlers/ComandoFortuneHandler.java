@@ -1,4 +1,4 @@
-package com.victor.commandserver.server;
+package com.victor.commandserver.server.handlers;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.victor.commandserver.server.commands.ComandoFortune;
 import com.victor.commandserver.services.FortuneService;
 
 @Sharable

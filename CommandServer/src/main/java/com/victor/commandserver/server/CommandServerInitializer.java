@@ -15,6 +15,12 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.victor.commandserver.server.handlers.ComandoEchoHandler;
+import com.victor.commandserver.server.handlers.ComandoFibonacciHandler;
+import com.victor.commandserver.server.handlers.ComandoFortuneHandler;
+import com.victor.commandserver.server.handlers.ComandoSalirHandler;
+import com.victor.commandserver.server.handlers.CommandServerHandler;
+
 @Component
 public class CommandServerInitializer extends
 		ChannelInitializer<NioSocketChannel> {
@@ -23,20 +29,23 @@ public class CommandServerInitializer extends
 			.getLogger(CommandServerInitializer.class.getName());
 	@Autowired
 	private ComandoFortuneHandler fortuneHandler;
-	
+
 	@Autowired
 	private ComandoFibonacciHandler fibHandler;
-	
+
 	@Autowired
 	private ComandoSalirHandler salirHandler;
-	
+
 	@Autowired
 	private CommandServerHandler serverHandler;
-	
+	@Autowired
+	private ComandoEchoHandler echoHandler;
+
 	private static final CommandDecoder COMMAND_DECODER = new CommandDecoder();
 	private static final StringEncoder STRING_ENCODER = new StringEncoder();
 	private static final StringDecoder STRING_DECODER = new StringDecoder();
-	private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.INFO);
+	private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(
+			LogLevel.INFO);
 	private static final int MAX_LENGTH = 1024;
 
 	@Override
@@ -54,7 +63,8 @@ public class CommandServerInitializer extends
 		pipeline.addLast("comando-salir", salirHandler);
 		pipeline.addLast("fibonacci-handler", fibHandler);
 		pipeline.addLast("fortune-handler", fortuneHandler);
-		
+		pipeline.addLast("echo-handler", echoHandler);
+
 		LOG.info("Initializing Channel pipeline");
 		pipeline.names().stream().forEachOrdered((String handlerName) -> {
 			LOG.info(handlerName);

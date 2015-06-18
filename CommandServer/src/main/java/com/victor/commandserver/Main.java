@@ -24,14 +24,6 @@ public class Main {
 	private CommandServer commandServer;
 
 	public static void main(String[] args) throws InterruptedException {
-		LOG.info("Iniciando Command Server");
-		ClassLoader cl = ClassLoader.getSystemClassLoader();
-		
-		URL[] urls = ((URLClassLoader)cl).getURLs();
-		
-		for(URL url: urls){
-			System.out.println(url.getFile());
-		}
 		ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 		
         
