@@ -1,5 +1,6 @@
 package com.victor.commandserver.server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -20,6 +21,9 @@ import com.victor.commandserver.server.handlers.ComandoFibonacciHandler;
 import com.victor.commandserver.server.handlers.ComandoFortuneHandler;
 import com.victor.commandserver.server.handlers.ComandoSalirHandler;
 import com.victor.commandserver.server.handlers.ComandoSumarHandler;
+import com.victor.commandserver.server.handlers.CustomExceptionHandler;
+import com.victor.commandserver.server.handlers.PromptPrinterHandler;
+import com.victor.commandserver.server.handlers.WelcomeMessageHandler;
 
 @Component
 public class CommandServerInitializer extends
@@ -46,6 +50,9 @@ public class CommandServerInitializer extends
 	private static final StringDecoder STRING_DECODER = new StringDecoder();
 	private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(
 			LogLevel.INFO);
+	private static final ChannelHandler EXCEPTION_HANDLER = new CustomExceptionHandler();
+	private static final ChannelHandler WELCOME_HANDLER = new WelcomeMessageHandler();
+	private static final ChannelHandler PROMPT_PRINTER = new PromptPrinterHandler();
 	private static final int MAX_LENGTH = 1024;
 
 	@Override
@@ -57,6 +64,8 @@ public class CommandServerInitializer extends
 				true));
 		pipeline.addLast("string-decoder", STRING_DECODER);
 		pipeline.addLast("string-encoder", STRING_ENCODER);
+		pipeline.addLast("prompt-printer", PROMPT_PRINTER);
+		pipeline.addLast("welcome-handler", WELCOME_HANDLER);
 		pipeline.addLast("idle-state-handler", new IdleStateHandler(20, 0, 0));
 		pipeline.addLast("comando-decoder", COMMAND_DECODER);
 		pipeline.addLast("sumar-handler", sumarHandler);
@@ -64,6 +73,7 @@ public class CommandServerInitializer extends
 		pipeline.addLast("fibonacci-handler", fibHandler);
 		pipeline.addLast("fortune-handler", fortuneHandler);
 		pipeline.addLast("echo-handler", echoHandler);
+		pipeline.addLast("exception-handler", EXCEPTION_HANDLER);
 
 		LOG.info("Initializing Channel pipeline");
 		pipeline.names().stream().forEachOrdered((String handlerName) -> {

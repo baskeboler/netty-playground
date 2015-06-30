@@ -2,6 +2,7 @@ package com.victor.commandserver.server;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import com.victor.commandserver.server.commands.ComandoFibonacci;
 import com.victor.commandserver.server.commands.ComandoFortune;
 import com.victor.commandserver.server.commands.ComandoSalir;
 import com.victor.commandserver.server.commands.ComandoSumar;
+import com.victor.commandserver.server.exceptions.ComandoUnknownException;
 
 @Sharable
 public class CommandDecoder extends MessageToMessageDecoder<String> {
@@ -35,7 +37,8 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 			out.add(new ComandoFortune());
 		} else if (palabras[0].equals("echo")) {
 			out.add(new ComandoEcho(msg));
+		} else {
+			throw new ComandoUnknownException(palabras[0]);
 		}
 	}
-
 }
