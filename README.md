@@ -18,6 +18,10 @@ just trying things out with netty
   * Echoes text
 * `chau`
   * Prints good-bye message and closes connection
+* `var set <var name> <var value>`
+  * sets var
+* `var get <var name>`
+  * retrieves var value
   
 ## other stuff
 * when connection is idle for some time server sends some text
