@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.victor.commandserver.server.commands.ComandoEcho;
@@ -41,7 +42,9 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 			out.add(new ComandoEcho(msg));
 		} else if (palabras[0].equals("var")) {
 			if (palabras[1].equals("set")) {
-				out.add(new ComandoSetVar(palabras[2], palabras[3]));
+				String[] values = Arrays.copyOfRange(palabras, 3, palabras.length);
+				String val = String.join(" ", values);
+				out.add(new ComandoSetVar(palabras[2], val));
 			} else if (palabras[1].equals("get")) {
 				out.add(new ComandoGetVar(palabras[2]));
 			}
