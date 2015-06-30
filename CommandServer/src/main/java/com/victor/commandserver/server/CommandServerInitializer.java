@@ -21,6 +21,7 @@ import com.victor.commandserver.server.handlers.ComandoFibonacciHandler;
 import com.victor.commandserver.server.handlers.ComandoFortuneHandler;
 import com.victor.commandserver.server.handlers.ComandoSalirHandler;
 import com.victor.commandserver.server.handlers.ComandoSumarHandler;
+import com.victor.commandserver.server.handlers.ComandoVarHandler;
 import com.victor.commandserver.server.handlers.CustomExceptionHandler;
 import com.victor.commandserver.server.handlers.PromptPrinterHandler;
 import com.victor.commandserver.server.handlers.WelcomeMessageHandler;
@@ -44,6 +45,9 @@ public class CommandServerInitializer extends
 	private ComandoSumarHandler sumarHandler;
 	@Autowired
 	private ComandoEchoHandler echoHandler;
+	
+	@Autowired
+	private ComandoVarHandler varHandler;
 
 	private static final CommandDecoder COMMAND_DECODER = new CommandDecoder();
 	private static final StringEncoder STRING_ENCODER = new StringEncoder();
@@ -73,6 +77,7 @@ public class CommandServerInitializer extends
 		pipeline.addLast("fibonacci-handler", fibHandler);
 		pipeline.addLast("fortune-handler", fortuneHandler);
 		pipeline.addLast("echo-handler", echoHandler);
+		pipeline.addLast("var-handler", getVarHandler());
 		pipeline.addLast("exception-handler", EXCEPTION_HANDLER);
 
 		LOG.info("Initializing Channel pipeline");
@@ -113,6 +118,14 @@ public class CommandServerInitializer extends
 
 	public void setServerHandler(ComandoSumarHandler serverHandler) {
 		this.sumarHandler = serverHandler;
+	}
+
+	public ComandoVarHandler getVarHandler() {
+		return varHandler;
+	}
+
+	public void setVarHandler(ComandoVarHandler varHandler) {
+		this.varHandler = varHandler;
 	}
 
 }

@@ -10,7 +10,9 @@ import java.util.List;
 import com.victor.commandserver.server.commands.ComandoEcho;
 import com.victor.commandserver.server.commands.ComandoFibonacci;
 import com.victor.commandserver.server.commands.ComandoFortune;
+import com.victor.commandserver.server.commands.ComandoGetVar;
 import com.victor.commandserver.server.commands.ComandoSalir;
+import com.victor.commandserver.server.commands.ComandoSetVar;
 import com.victor.commandserver.server.commands.ComandoSumar;
 import com.victor.commandserver.server.exceptions.ComandoUnknownException;
 
@@ -37,6 +39,12 @@ public class CommandDecoder extends MessageToMessageDecoder<String> {
 			out.add(new ComandoFortune());
 		} else if (palabras[0].equals("echo")) {
 			out.add(new ComandoEcho(msg));
+		} else if (palabras[0].equals("var")) {
+			if (palabras[1].equals("set")) {
+				out.add(new ComandoSetVar(palabras[2], palabras[3]));
+			} else if (palabras[1].equals("get")) {
+				out.add(new ComandoGetVar(palabras[2]));
+			}
 		} else {
 			throw new ComandoUnknownException(palabras[0]);
 		}
