@@ -14,9 +14,10 @@ just trying things out with netty
   * returns the fibonacci sequence number
 * `fortune`
   * returns random fortune text, similar to unix fortune command
+* `echo <text`
+  * Echoes text
 * `chau`
-  * closes connection
-  * 
+  * Prints good-bye message and closes connection
   
 ## other stuff
 * when connection is idle for some time server sends some text
