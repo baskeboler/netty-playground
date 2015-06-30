@@ -21,3 +21,5 @@ just trying things out with netty
 ## other stuff
 * when connection is idle for some time server sends some text
   * just trying out IdleStateEvent handling.
+* Welcome message handler that removes itself from pipeline after printing welcome message.
+* Prompt printer handler.
