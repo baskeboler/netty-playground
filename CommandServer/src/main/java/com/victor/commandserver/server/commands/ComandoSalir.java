@@ -1,5 +1,5 @@
 package com.victor.commandserver.server.commands;
 
-public class ComandoSalir {
+public class ComandoSalir extends AbstractBaseComando {
 
 }

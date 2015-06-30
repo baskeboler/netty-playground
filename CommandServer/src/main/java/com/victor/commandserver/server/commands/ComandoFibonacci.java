@@ -1,6 +1,6 @@
 package com.victor.commandserver.server.commands;
 
-public class ComandoFibonacci {
+public class ComandoFibonacci extends AbstractBaseComando{
 	int a;
 
 	public ComandoFibonacci(int a) {

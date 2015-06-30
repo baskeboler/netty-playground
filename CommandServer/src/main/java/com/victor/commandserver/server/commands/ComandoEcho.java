@@ -1,6 +1,6 @@
 package com.victor.commandserver.server.commands;
 
-public class ComandoEcho {
+public class ComandoEcho extends AbstractBaseComando{
 	private String msg;
 
 	public ComandoEcho(String msg) {

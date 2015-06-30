@@ -2,6 +2,7 @@ package com.victor.commandserver.test;
 
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.DecoderException;
+import io.netty.handler.logging.LoggingHandler;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -9,6 +10,7 @@ import org.junit.Test;
 
 import com.victor.commandserver.server.CommandDecoder;
 import com.victor.commandserver.server.commands.ComandoEcho;
+import com.victor.commandserver.server.commands.ComandoFibonacci;
 import com.victor.commandserver.server.commands.ComandoFortune;
 import com.victor.commandserver.server.commands.ComandoSalir;
 import com.victor.commandserver.server.commands.ComandoSumar;
@@ -23,7 +25,7 @@ public class CommandDecoderTest {
 	@Before
 	public void init() {
 		LOGGER.info("Running init() method");
-		ch = new EmbeddedChannel(new CommandDecoder());
+		ch = new EmbeddedChannel(new LoggingHandler(), new CommandDecoder());
 	}
 	
 	@Test
@@ -35,6 +37,16 @@ public class CommandDecoderTest {
 		ComandoSumar s = (ComandoSumar) ret;
 		assertTrue(s.getA() == 2);
 		assertTrue(s.getB() == 3);
+	}
+	
+	@Test
+	public void testDecodeFibonacci() {
+		ch.writeInbound("fibonacci 17\n");
+		Object ret = ch.readInbound();
+		assertNotNull(ret);
+		assertTrue(ret instanceof ComandoFibonacci);
+		ComandoFibonacci s = (ComandoFibonacci) ret;
+		assertTrue(s.getA() == 17);
 	}
 	
 	@Test
