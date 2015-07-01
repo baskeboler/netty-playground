@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.victor.commandserver.server.handlers.AttributesHandler;
 import com.victor.commandserver.server.handlers.ComandoEchoHandler;
 import com.victor.commandserver.server.handlers.ComandoFibonacciHandler;
 import com.victor.commandserver.server.handlers.ComandoFortuneHandler;
@@ -48,8 +49,13 @@ public class CommandServerInitializer extends
 	
 	@Autowired
 	private ComandoVarHandler varHandler;
+	
+	@Autowired
+	private AttributesHandler attributesHandler;
 
-	private static final CommandDecoder COMMAND_DECODER = new CommandDecoder();
+	@Autowired
+	private CommandDecoder commandDecoder;
+	
 	private static final StringEncoder STRING_ENCODER = new StringEncoder();
 	private static final StringDecoder STRING_DECODER = new StringDecoder();
 	private static final LoggingHandler LOGGING_HANDLER = new LoggingHandler(
@@ -71,12 +77,13 @@ public class CommandServerInitializer extends
 		pipeline.addLast("prompt-printer", PROMPT_PRINTER);
 		pipeline.addLast("welcome-handler", WELCOME_HANDLER);
 		pipeline.addLast("idle-state-handler", new IdleStateHandler(20, 0, 0));
-		pipeline.addLast("comando-decoder", COMMAND_DECODER);
+		pipeline.addLast("comando-decoder", commandDecoder);
 		pipeline.addLast("sumar-handler", sumarHandler);
 		pipeline.addLast("comando-salir", salirHandler);
 		pipeline.addLast("fibonacci-handler", fibHandler);
 		pipeline.addLast("fortune-handler", fortuneHandler);
 		pipeline.addLast("echo-handler", echoHandler);
+		pipeline.addLast("attributes-handler", attributesHandler);
 		pipeline.addLast("var-handler", getVarHandler());
 		pipeline.addLast("exception-handler", EXCEPTION_HANDLER);
 
@@ -126,6 +133,22 @@ public class CommandServerInitializer extends
 
 	public void setVarHandler(ComandoVarHandler varHandler) {
 		this.varHandler = varHandler;
+	}
+
+	public AttributesHandler getAttributesHandler() {
+		return attributesHandler;
+	}
+
+	public void setAttributesHandler(AttributesHandler attributesHandler) {
+		this.attributesHandler = attributesHandler;
+	}
+
+	public CommandDecoder getCommandDecoder() {
+		return commandDecoder;
+	}
+
+	public void setCommandDecoder(CommandDecoder commandDecoder) {
+		this.commandDecoder = commandDecoder;
 	}
 
 }

@@ -22,6 +22,8 @@ public class WelcomeMessageHandler extends ChannelHandlerAdapter {
 		sb.append("Comandos disponibles: \n");
 
 		sb.append("             echo <mensaje>\n");
+		sb.append("             <var> = <number>\n");
+		sb.append("             :<var>\n");
 		sb.append("             sumar <numero> <numero>\n");
 		sb.append("             fortune\n");
 		sb.append("             fibonacci <numero>\n");
